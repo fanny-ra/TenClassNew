@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_sarpras',
+        'is_osis',
+        'study_groups_id',
     ];
 
     /**
@@ -43,6 +47,23 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_sarpras' => 'boolean',
+            'is_osis' => 'boolean'
         ];
+    }
+
+    public function studyGroup()
+    {
+        return $this->belongsTo(StudyGroup::class, 'study_groups_id');
+    }
+
+    public function isGuru()
+    {
+        return $this->role === 'guru';
+    }
+
+    public function isMurid()
+    {
+        return $this->role === 'murid';
     }
 }

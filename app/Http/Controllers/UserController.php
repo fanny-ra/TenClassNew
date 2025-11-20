@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Schedules;
+use App\Models\StudyGroup;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class SchedulesController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $users = User::with('studyGroup')->latest()->get();
+
+        return view('users.index', compact('users'));
     }
 
     /**
@@ -20,7 +23,9 @@ class SchedulesController extends Controller
      */
     public function create()
     {
-        //
+        $studyGroups = StudyGroup::all();
+
+        return view('users.create', compact('studyGroups'));
     }
 
     /**
@@ -34,23 +39,27 @@ class SchedulesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Schedules $schedules)
+    public function show(User $user)
     {
-        //
+        $user->load('studyGroup');
+
+        return view('users.show', compact('user'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Schedules $schedules)
+    public function edit(User $user)
     {
-        //
+        $studyGroups = StudyGroup::all();
+
+        return view('users.edit', compact('user', 'studyGroups'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Schedules $schedules)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -58,7 +67,7 @@ class SchedulesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Schedules $schedules)
+    public function destroy(User $user)
     {
         //
     }

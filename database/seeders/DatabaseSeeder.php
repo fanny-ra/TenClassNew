@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
     {
          $this->call([
             StudyGroupSeeder::class,
-            UserSeeder::class,  // User dibuat, ID 1, 2, 3, 4, 5.
-            RoomSeeder::class,  // Room dibuat, ID 1, 2, 3, 4.
+            UserSeeder::class,
+            RoomSeeder::class,
             ScheduleSeeder::class, // <-- DIJALANKAN DI SINI
         ]);
     }

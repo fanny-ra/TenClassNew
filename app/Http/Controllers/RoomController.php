@@ -12,7 +12,9 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
+        $rooms = Room::latest()->get();
+
+        return view('rooms.index', compact('rooms'));
     }
 
     /**
@@ -20,7 +22,9 @@ class RoomController extends Controller
      */
     public function create()
     {
-        //
+        $types = ['teori', 'aula', 'lab'];
+
+        return view('rooms.create', compact('types'));
     }
 
     /**
@@ -36,7 +40,7 @@ class RoomController extends Controller
      */
     public function show(Room $room)
     {
-        //
+        return view('rooms.show', compact('room'));
     }
 
     /**
@@ -44,7 +48,9 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        //
+        $types = ['teori', 'aula', 'lab'];
+
+        return view('rooms.edit', compact('room', 'types'));
     }
 
     /**
