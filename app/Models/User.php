@@ -42,15 +42,13 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_sarpras' => 'boolean',
-            'is_osis' => 'boolean'
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'is_sarpras' => 'boolean',
+        'is_osis' => 'boolean',
+    ];
+
 
     public function studyGroup()
     {

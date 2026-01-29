@@ -24,7 +24,6 @@ class Schedule extends Model
     ];
 
     protected $casts = [
-        'date' => 'date',
         'recurring' => 'boolean',
     ];
 

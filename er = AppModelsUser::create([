@@ -1,0 +1,13 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#6561
+    [34mname[39m: "[32mTest User[39m",
+    [34memail[39m: "[32mtestuser@sekolah.com[39m",
+    #[33mpassword[39m: "[32m$2y$12$2NnsGniK4DAE9pMwpY88yuXJjwY4MVke6f8MtLL1ZYKVtBfoi5yqW[39m",
+    [34mrole[39m: "[32mmurid[39m",
+    [34mis_sarpras[39m: [36mfalse[39m,
+    [34mis_osis[39m: [36mfalse[39m,
+    [34mstudy_groups_id[39m: [36mnull[39m,
+    [34mupdated_at[39m: "[32m2026-01-22 06:40:29[39m",
+    [34mcreated_at[39m: "[32m2026-01-22 06:40:29[39m",
+    [34mid[39m: [35m5[39m,
+  }
+

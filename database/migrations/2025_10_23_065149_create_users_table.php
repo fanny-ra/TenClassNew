@@ -50,8 +50,8 @@
             Schema::dropIfExists('password_reset_tokens');
 
             Schema::table('users', function (Blueprint $table) {
-                $table->dropForeign(['study_group_id']);
-                $table->dropColumn(['role', 'is_sarpras', 'is_osis', 'study_group_id']);
+                $table->dropForeign(['study_groups_id']);
+                $table->dropColumn(['role', 'is_sarpras', 'is_osis', 'study_groups_id']);
             });
 
             Schema::dropIfExists('users');

@@ -1,37 +1,45 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SchedulesController;
 use App\Http\Controllers\StudyGroupController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| HOME
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
 Route::middleware('guest')->group(function () {
-    // Tampilkan form pendaftaran
-    Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-    // Proses pendaftaran
-    Route::post('/register', [AuthController::class, 'register']);
-
-    // Tampilkan form login
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    // Proses login
     Route::post('/login', [AuthController::class, 'login']);
+
+    Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
 });
 
 Route::middleware('auth')->group(function () {
-    // Proses logout
+
+    // logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-    // Resource Routes yang memerlukan autentikasi untuk CRUD
-
-    // CRUD Jadwal
-    Route::resource('schedules', SchedulesController::class);
-
-    // CRUD Grup Belajar
     Route::resource('studygroups', StudyGroupController::class);
-});
 
-Route::resource('studygroups', StudyGroupController::class);
+    Route::resource('schedules', ScheduleController::class);
+
+    // approval peminjaman (khusus sarpras)
+    Route::put('/schedules/{schedule}/approve', [ScheduleController::class, 'approve'])
+        ->name('schedules.approve');
+
+    Route::put('/schedules/{schedule}/reject', [ScheduleController::class, 'reject'])
+        ->name('schedules.reject');
+
+    // pengembalian / selesai
+    Route::put('/schedules/{schedule}/return', [ScheduleController::class, 'returnRoom'])
+        ->name('schedules.return');
+
+});

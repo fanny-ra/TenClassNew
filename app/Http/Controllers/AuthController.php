@@ -23,45 +23,53 @@ class AuthController extends Controller
     /**
      * Menyimpan data user baru (Pendaftaran).
      */
-    public function register(Request $request)
-    {
-        // 1. Validasi Data Pendaftaran
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'string', Rule::in(['murid', 'guru'])], // Sesuaikan dengan Enum jika Anda menggunakannya
-            'study_groups_id' => ['nullable', 'exists:study_groups,id'],
+public function register(Request $request)
+{
+    // 1. Validasi input
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'role' => 'required|in:murid,guru', // hanya murid atau guru
+        'study_groups_id' => 'nullable|exists:study_groups,id',
+    ]);
+
+    try {
+        // 2. Buat user baru
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'is_sarpras' => false,  // otomatis
+            'is_osis' => false,     // otomatis
+            'study_groups_id' => $request->study_groups_id ?? null,
         ]);
 
-        try {
-            // 2. Buat User baru
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password), // WAJIB: Enkripsi password!
-                'role' => $request->role,
-                'study_groups_id' => $request->study_groups_id,
-                // is_sarpras dan is_osis otomatis false (default di migration)
-            ]);
+        // 3. Debug: cek data user
+        // dd($user); // aktifkan kalau mau pastiin data terbentuk
 
-            // 3. Langsung loginkan user setelah pendaftaran
-            Auth::login($user);
+        // 4. Auto-login
+        Auth::login($user);
 
-            return redirect()->route('home')->with('success', 'Pendaftaran berhasil! Selamat datang.');
+        return redirect()->route('home')->with('success', 'Pendaftaran berhasil! Selamat datang.');
 
-        } catch (\Exception $e) {
-            // Tangani error database jika ada
-            return back()->withInput()->withErrors(['error' => 'Gagal mendaftar. Silakan coba lagi.']);
-        }
+    } catch (\Exception $e) {
+        // Tangani error
+        return back()->withInput()->withErrors([
+            'error' => 'Gagal mendaftar. Cek input atau hubungi admin.'
+        ]);
     }
+}
+
+
 
     /**
      * Menampilkan form Login.
      */
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('login');
     }
 
     /**
@@ -71,7 +79,7 @@ class AuthController extends Controller
     {
         // 1. Validasi input
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'name' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
@@ -84,8 +92,8 @@ class AuthController extends Controller
 
         // 3. Autentikasi gagal
         return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan salah.',
-        ])->onlyInput('email');
+            'name' => 'name atau password yang Anda masukkan salah.',
+        ])->onlyInput('name');
     }
 
     /**
